@@ -1,11 +1,39 @@
 <template>
   <div class="fi-editor" :class="[font, { disabled: disabled }]">
     <div class="fi-editor__toolbar">
-      <VButton v-for="extension in toolbarExtensions"
-        :disabled="disabled || !editor.can()?.[extensionsMap?.[extension]?.command]()" secondary icon small
-        :active="editor.isActive(extension)" @click="toggleCommand(extension)">
-        <VIcon :name="extensionsMap![extension]?.icon" />
+      <VButton v-if="editorExtensions.includes('bold')" :disabled="disabled || !editor.can().toggleBold()" secondary
+        icon small :active="editor.isActive('bold')" @click="editor.chain().focus().toggleBold().run()">
+        <VIcon name="format_bold" />
       </VButton>
+      <VButton v-if="editorExtensions.includes('italic')" :disabled="disabled || !editor.can().toggleItalic()" secondary
+        icon small :active="editor.isActive('italic')" @click="editor.chain().focus().toggleItalic().run()">
+        <VIcon name="format_italic" />
+      </VButton>
+      <VButton v-if="editorExtensions.includes('underline')" :disabled="disabled || !editor.can().toggleUnderline()"
+        secondary icon small :active="editor.isActive('underline')"
+        @click="editor.chain().focus().toggleUnderline().run()">
+        <VIcon name="format_underlined" />
+      </VButton>
+      <VButton v-if="editorExtensions.includes('strike')" :disabled="disabled || !editor.can().toggleStrike()" secondary
+        icon small :active="editor.isActive('strike')" @click="editor.chain().focus().toggleStrike().run()">
+        <VIcon name="format_strikethrough" />
+      </VButton>
+      <VButton v-if="editorExtensions.includes('subscript')" :disabled="disabled || !editor.can().toggleSubscript()"
+        secondary icon small :active="editor.isActive('subscript')"
+        @click="editor.chain().focus().toggleSubscript().run()">
+        <VIcon name="subscript" />
+      </VButton>
+      <VButton v-if="editorExtensions.includes('superscript')" :disabled="disabled || !editor.can().toggleSuperscript()"
+        secondary icon small :active="editor.isActive('superscript')"
+        @click="editor.chain().focus().toggleSuperscript().run()">
+        <VIcon name="superscript" />
+      </VButton>
+      <VButton v-if="editorExtensions.includes('highlight')" :disabled="disabled || !editor.can().toggleHighlight()"
+        secondary icon small :active="editor.isActive('highlight')"
+        @click="editor.chain().focus().toggleHighlight().run()">
+        <VIcon name="format_ink_highlighter" />
+      </VButton>
+
       <VButton class="ml-auto" :disabled="disabled" secondary icon small
         @click="editor.chain().focus().unsetAllMarks().run()">
         <VIcon name="format_clear" />
@@ -49,20 +77,6 @@ const editor = new Editor({
 })
 
 const editorExtensions = editor.extensionManager.extensions.map((ext) => ext.name)
-const toolbarExtensions = props.toolbar?.filter((v: Formats | string) => editorExtensions?.includes(v))
-const extensionsMap: { [key in Formats]: { command: string, icon: string } } = {
-  bold: { command: 'toggleBold', icon: 'format_bold' },
-  italic: { command: 'toggleItalic', icon: 'format_italic' },
-  underline: { command: 'toggleUnderline', icon: 'format_underlined' },
-  strike: { command: 'toggleStrike', icon: 'format_strikethrough' },
-  subscript: { command: 'toggleSubscript', icon: 'subscript' },
-  superscript: { command: 'toggleSuperscript', icon: 'superscript' },
-  highlight: { command: 'toggleHighlight', icon: 'format_ink_highlighter' },
-}
-
-function toggleCommand(extension: string) {
-  editor.isActive(extension) ? editor.chain().focus().setMark(extension).run() : editor.chain().focus().unsetMark(extension).run()
-}
 
 watch(() => props.value, (value) => {
   if (!value) return
