@@ -1,32 +1,76 @@
 {
-	"name": "directus-extension-formatted-string-interface",
-	"description": "A simple Rich String Editor to format short texts",
+	"name": "formatted-input",
+	"description": "A simple Rich Inline Editor to format short texts",
 	"icon": "extension",
-	"version": "1.0.0",
+	"version": "2.0.0",
+	"license": "MIT",
+	"author": {
+		"email": "gorliluigi@gmail.com",
+		"name": "Luigi Gorlero"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/luigigorlero/directus-extension-formatted-input"
+	},
 	"keywords": [
 		"directus",
 		"directus-extension",
-		"directus-custom-interface"
+		"directus-custom-bundle",
+		"directus-custom-interface",
+		"directus-custom-display",
+		"tiptap",
+		"editor"
 	],
 	"type": "module",
+	"files": [
+		"dist"
+	],
 	"directus:extension": {
-		"type": "interface",
-		"path": "dist/index.js",
-		"source": "src/index.ts",
-		"host": "^10.3.3"
+		"type": "bundle",
+		"path": {
+			"app": "dist/app.js",
+			"api": "dist/api.js"
+		},
+		"entries": [
+			{
+				"type": "interface",
+				"name": "directus-extension-tiptap-interface",
+				"source": "src/interface.ts"
+			},
+			{
+				"type": "display",
+				"name": "directus-extension-tiptap-display",
+				"source": "src/display.ts"
+			}
+		],
+		"host": "^10.10.0"
 	},
 	"scripts": {
 		"build": "directus-extension build",
 		"dev": "directus-extension build -w --no-minify",
-		"link": "directus-extension link"
-	},
-	"devDependencies": {
-		"@directus/extensions-sdk": "10.3.3",
-		"@types/dompurify": "^3.0.5",
-		"typescript": "^5.3.3",
-		"vue": "^3.4.19"
+		"link": "directus-extension link",
+		"add": "directus-extension add"
 	},
 	"dependencies": {
-		"dompurify": "^3.0.8"
+		"@tiptap/core": "^2.2.4",
+		"@tiptap/extension-bold": "^2.2.4",
+		"@tiptap/extension-document": "^2.2.4",
+		"@tiptap/extension-highlight": "^2.2.4",
+		"@tiptap/extension-italic": "^2.2.4",
+		"@tiptap/extension-paragraph": "^2.2.4",
+		"@tiptap/extension-strike": "^2.2.4",
+		"@tiptap/extension-subscript": "^2.2.4",
+		"@tiptap/extension-superscript": "^2.2.4",
+		"@tiptap/extension-text": "^2.2.4",
+		"@tiptap/extension-underline": "^2.2.4",
+		"@tiptap/pm": "^2.2.4"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "11.0.1",
+		"@directus/schema": "^11.0.1",
+		"@directus/types": "^11.0.7",
+		"@tiptap/vue-3": "^2.2.4",
+		"typescript": "^5.4.2",
+		"vue": "^3.4.21"
 	}
 }
