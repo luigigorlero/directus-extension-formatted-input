@@ -3,7 +3,7 @@
     <div class="fi-editor__toolbar">
       <VButton v-for="extension in toolbarExtensions"
         :disabled="disabled || !editor.can()?.[extensionsMap?.[extension]?.command]()" secondary icon small
-        :active="editor.isActive(extension)" @click="editor.chain().focus()?.[extensionsMap?.[extension]?.command]().run()">
+        :active="editor.isActive(extension)" @click="toggleCommand(extension)">
         <VIcon :name="extensionsMap![extension]?.icon" />
       </VButton>
       <VButton class="ml-auto" :disabled="disabled" secondary icon small
@@ -38,7 +38,6 @@ const emit = defineEmits<{ (e: "input", value: HTMLContent): void }>()
 
 const editorInitiated = ref<boolean>(false)
 const extensions = await loadExtensions(props)
-console.log(props.toolbar, extensions)
 const editor = new Editor({
   editable: !props.disabled,
   content: props.value,
@@ -59,6 +58,10 @@ const extensionsMap: { [key in Formats]: { command: string, icon: string } } = {
   subscript: { command: 'toggleSubscript', icon: 'subscript' },
   superscript: { command: 'toggleSuperscript', icon: 'superscript' },
   highlight: { command: 'toggleHighlight', icon: 'format_ink_highlighter' },
+}
+
+function toggleCommand(extension: string) {
+  editor.isActive(extension) ? editor.chain().focus().setMark(extension).run() : editor.chain().focus().unsetMark(extension).run()
 }
 
 watch(() => props.value, (value) => {

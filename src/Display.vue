@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HTMLContent } from '@tiptap/vue-3'
-import { useElementSize } from '@directus/composables'
+import { useElementSize } from './composables/use-element-size'
 import { computed, ref, watch } from 'vue'
 
 const props = withDefaults(defineProps<{
