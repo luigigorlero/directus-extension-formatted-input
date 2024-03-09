@@ -1,5 +1,5 @@
 {
-	"name": "formatted-input",
+	"name": "directus-extension-formatted-input",
 	"description": "A simple Rich Inline Editor to format short texts",
 	"icon": "extension",
 	"version": "2.0.0",
