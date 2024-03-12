@@ -119,6 +119,9 @@ onBeforeUnmount(() => editor.destroy())
 }
 
 .fi-editor__content {
+  display: flex;
+  align-items: center;
+  min-height: var(--theme--form--field--input--height);
   padding: var(--theme--form--field--input--padding);
   color: var(--theme--foreground);
   font-family: var(--v-textarea-font-family, var(--theme--fonts--sans--font-family));

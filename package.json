@@ -2,7 +2,7 @@
 	"name": "directus-extension-formatted-input",
 	"description": "A simple Rich Inline Editor to format short texts",
 	"icon": "extension",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"license": "MIT",
 	"author": {
 		"email": "gorliluigi@gmail.com",
@@ -34,12 +34,12 @@
 		"entries": [
 			{
 				"type": "interface",
-				"name": "directus-extension-tiptap-interface",
+				"name": "formatted-input-interface",
 				"source": "src/interface.ts"
 			},
 			{
 				"type": "display",
-				"name": "directus-extension-tiptap-display",
+				"name": "formatted-input-display",
 				"source": "src/display.ts"
 			}
 		],
