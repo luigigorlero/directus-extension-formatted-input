@@ -131,6 +131,10 @@ onBeforeUnmount(() => editor.destroy())
   transition: border-color var(--fast) var(--transition);
 }
 
+.fi-editor__content:deep(.tiptap) {
+  flex: 1;
+}
+
 .fi-editor__content:focus,
 .fi-editor__content:focus-within {
   border-color: var(--theme--form--field--input--border-color-focus) !important;
