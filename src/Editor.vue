@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   value: null,
   disabled: false,
-  toolbar: null,
+  toolbar: () => ['bold', 'italic', 'underline'],
   font: 'sans-serif',
 })
 const emit = defineEmits<{ (e: "input", value: HTMLContent): void }>()
