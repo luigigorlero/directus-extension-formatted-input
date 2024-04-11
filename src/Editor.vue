@@ -33,13 +33,63 @@
         @click="editor.chain().focus().toggleHighlight().run()">
         <VIcon name="format_ink_highlighter" />
       </VButton>
+      <template v-if="editorExtensions.includes('link')">
+        <span style="width: 12px;" />
+        <div>
+          <VButton
+            :disabled="disabled || !editor.can().setLink({ href: '' }) || (!editor.isActive('link') && editor.view.state.selection?.from === editor.view.state.selection?.to)"
+            secondary icon small :active="editor.isActive('link')" @click="linkOpen">
+            <VIcon name="link" />
+          </VButton>
+          <VButton :disabled="disabled || !editor.isActive('link')" secondary icon small @click="linkRemove">
+            <VIcon name="link_off" />
+          </VButton>
+        </div>
+      </template>
 
       <VButton class="ml-auto" :disabled="disabled" secondary icon small
         @click="editor.chain().focus().unsetAllMarks().run()">
         <VIcon name="format_clear" />
       </VButton>
     </div>
+
     <EditorContent class="fi-editor__content" :editor="editor" />
+
+    <VDrawer v-model="linkDrawerOpen" :title="t('wysiwyg_options.link')" icon="link" @cancel="linkClose">
+      <VCardText>
+        <div class="grid">
+          <VNotice v-if="validationErrors.length" type="danger" class="field">
+            <div>
+              <p>{{ t('validation_errors_notice') }}</p>
+              <ul>
+                <li v-for="error in validationErrors">{{ error }}</li>
+              </ul>
+            </div>
+          </VNotice>
+          <div class="field">
+            <div class="type-label">{{ t('type') }}</div>
+            <VSelect v-model="linkType" :items="linkTypes" />
+          </div>
+          <div class="field">
+            <div class="type-label">{{ t('url') }}</div>
+            <VInput v-model="linkHref" :placeholder="linkPlaceholder" />
+          </div>
+          <div class="field">
+            <div class="type-label">{{ t('open_link_in') }}</div>
+            <VCheckbox v-model="linkBlank" :label="t('new_tab')" :disabled="disableTarget" block />
+          </div>
+        </div>
+      </VCardText>
+      <template #actions>
+        <VButton v-tooltip.bottom="'Save'" icon rounded :disabled="linkHref === null" @click="linkSave">
+          <VIcon name="check" />
+        </VButton>
+        <VButton v-tooltip.bottom="'Remove'" icon rounded :disabled="!editor.isActive('link')" danger
+          @click="linkRemove">
+          <VIcon name="delete" />
+        </VButton>
+      </template>
+    </VDrawer>
   </div>
 </template>
 
@@ -48,9 +98,12 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 import { onBeforeUnmount, ref, watch } from 'vue'
 import type { HTMLContent } from '@tiptap/vue-3'
 import { loadExtensions } from './extensions'
+import { useLink } from './composables/link'
+import { useI18n } from 'vue-i18n'
 
-type Formats = 'bold' | 'highlight' | 'italic' | 'strike' | 'subscript' | 'superscript' | 'underline'
+type Formats = 'bold' | 'highlight' | 'italic' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'link'
 
+const { t } = useI18n()
 const props = withDefaults(defineProps<{
   value: HTMLContent | null
   disabled: boolean
@@ -77,6 +130,20 @@ const editor = new Editor({
 })
 
 const editorExtensions = editor.extensionManager.extensions.map((ext) => ext.name)
+const {
+  disableTarget,
+  linkDrawerOpen,
+  linkHref,
+  linkBlank,
+  linkType,
+  linkTypes,
+  linkPlaceholder,
+  linkOpen,
+  linkClose,
+  linkSave,
+  linkRemove,
+  validationErrors,
+} = useLink(editor)
 
 watch(() => props.value, (value) => {
   if (!value) return
@@ -107,7 +174,12 @@ onBeforeUnmount(() => editor.destroy())
 
 .fi-editor__toolbar {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 4px;
+}
+
+.fi-editor__toolbar .v-button {
+  margin-top: 2px;
 }
 
 .fi-editor__toolbar .v-button+.v-button {
@@ -135,9 +207,53 @@ onBeforeUnmount(() => editor.destroy())
   flex: 1;
 }
 
+.fi-editor__content:deep(a) {
+  color: var(--theme--primary, var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .fi-editor__content:focus,
 .fi-editor__content:focus-within {
   border-color: var(--theme--form--field--input--border-color-focus) !important;
   box-shadow: var(--theme--form--field--input--box-shadow-focus) !important;
 }
+
+.v-drawer .grid {
+  display: grid;
+  gap: var(--theme--form--row-gap) var(--theme--form--column-gap);
+}
+
+.v-drawer .grid .field .type-label {
+  margin-bottom: 8px;
+}
+
+@media (min-width: 600px) {
+  .v-drawer .v-card-text {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/*
+.v-drawer {
+  .grid {
+    @include form-grid;
+  }
+
+  .content {
+    padding: var(--content-padding);
+    padding-top: 0;
+  }
+
+  .image-preview,
+  .media-preview {
+    width: 100%;
+    height: var(--input-height-tall);
+    margin-bottom: 24px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+}
+*/
 </style>

@@ -55,6 +55,10 @@ export default defineInterface({
               value: 'highlight',
               text: 'Highlight',
             },
+            {
+              value: 'link',
+              text: '$t:wysiwyg_options.link',
+            },
           ],
         },
       },

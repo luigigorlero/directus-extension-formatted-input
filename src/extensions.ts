@@ -8,6 +8,7 @@ import Strike from '@tiptap/extension-strike'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import Highlight from '@tiptap/extension-highlight'
+import Link from '@tiptap/extension-link'
 
 export interface ExtensionMeta {
   name: string
@@ -82,6 +83,27 @@ export const extensionsMeta: ExtensionMeta[] = [
     defaults: {},
     options: [],
     load: () => Highlight,
+  },
+  {
+    name: 'link',
+    title: 'Link',
+    package: '@tiptap/extension-link',
+    group: 'mark',
+    defaults: {},
+    options: [],
+    load: () => Link
+      .extend({ inclusive: false })
+      .configure({
+        HTMLAttributes: { rel: null, target: null },
+        openOnClick: 'whenNotEditable',
+        protocols: [
+          'ftp',
+          'http',
+          'https',
+          'mailto',
+          { scheme: 'tel', optionalSlashes: false },
+        ],
+      }),
   },
 ]
 

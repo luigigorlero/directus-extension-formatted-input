@@ -30,3 +30,7 @@ Navigate to the interface tab to adjust the settings.
 ### Display
 
 The extension comes bundled with a `Rich String` display to render the HTML.
+
+### Credits
+
+[Flexible Editor by formfcw (Florian C. Wachmann)](https://github.com/formfcw/directus-extension-flexible-editor) and [Tiptap for Directus by gbicou (Benjamin Viellard)](https://github.com/gbicou/directus-extension-tiptap) for the implementation of more advanced functionalities.
