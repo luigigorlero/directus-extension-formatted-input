@@ -68,20 +68,20 @@
           </VNotice>
           <div class="field">
             <div class="type-label">{{ t('type') }}</div>
-            <VSelect v-model="linkType" :items="linkTypes" />
+            <VSelect v-model="link.type" :items="linkTypes" />
           </div>
           <div class="field">
             <div class="type-label">{{ t('url') }}</div>
-            <VInput v-model="linkHref" :placeholder="linkPlaceholder" />
+            <VInput v-model="link.href" :placeholder="linkPlaceholder" />
           </div>
           <div class="field">
             <div class="type-label">{{ t('open_link_in') }}</div>
-            <VCheckbox v-model="linkBlank" :label="t('new_tab')" :disabled="disableTarget" block />
+            <VCheckbox v-model="link.blank" :label="t('new_tab')" :disabled="disableTarget" block />
           </div>
         </div>
       </VCardText>
       <template #actions>
-        <VButton v-tooltip.bottom="'Save'" icon rounded :disabled="linkHref === null" @click="linkSave">
+        <VButton v-tooltip.bottom="'Save'" icon rounded :disabled="link.href === null" @click="linkSave">
           <VIcon name="check" />
         </VButton>
         <VButton v-tooltip.bottom="'Remove'" icon rounded :disabled="!editor.isActive('link')" danger
@@ -133,9 +133,7 @@ const editorExtensions = editor.extensionManager.extensions.map((ext) => ext.nam
 const {
   disableTarget,
   linkDrawerOpen,
-  linkHref,
-  linkBlank,
-  linkType,
+  link,
   linkTypes,
   linkPlaceholder,
   linkOpen,

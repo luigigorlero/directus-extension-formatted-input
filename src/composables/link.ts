@@ -7,10 +7,17 @@ import isSlug from 'validator/lib/isSlug'
 
 export function useLink(editor: Editor) {
   const { t } = useI18n()
+  const linkDrawerOpen = ref(false)
+  const link = ref<{ type: LinkTypeValue, href: string, blank: boolean | null }>({
+    type: undefined,
+    href: '',
+    blank: null,
+  })
 
+  type LinkTypeValue = 'external_link' | 'internal_link' | 'email' | 'tel' | undefined
   type LinkType = {
     text: string
-    value: string | null
+    value: LinkTypeValue
     prefix: string[]
     hidePrefix?: boolean
     placeholder?: string | boolean
@@ -22,44 +29,62 @@ export function useLink(editor: Editor) {
     { text: 'Internal Link', value: 'internal_link', prefix: ['/'], placeholder: '/', newTabDefault: false },
     { text: t('email'), value: 'email', prefix: ['mailto:'], hidePrefix: true, placeholder: 'mail@example.com', noTarget: true },
     { text: 'Phone Number', value: 'tel', prefix: ['tel:'], hidePrefix: true, placeholder: '+1234567890', noTarget: true },
-    { text: t('other'), value: null, prefix: [] },
+    { text: t('other'), value: undefined, prefix: [] },
   ]
 
-  const linkDrawerOpen = ref(false)
-  const linkHref = ref('')
-  const linkBlank = ref<boolean | null>(false)
-  const linkType = ref(linkTypes[0]?.value)
+  // const linkHref = ref('')
+  // const linkBlank = ref<boolean | null>(false)
+  // const linkType = ref(linkTypes[0]?.value)
 
   const linkPlaceholder = computed(() => {
-    const link = linkTypes.find((t) => t.value === linkType.value)
+    const linkType = linkTypes.find((t) => t.value === link.value.type)
 
-    if (link?.placeholder) return link.placeholder
+    if (linkType?.placeholder) return linkType.placeholder
     return false
   })
 
   const disableTarget = computed(() => {
-    const link = linkTypes.find(({ value }) => value === linkType.value)
+    const linkType = linkTypes.find(({ value }) => value === link.value.type)
 
-    if (link?.noTarget) return true
+    if (linkType?.noTarget) return true
     return false
   })
 
   watchEffect(() => {
-    const link = linkTypes.find(({ value }) => value === linkType.value)
-    if (link?.noTarget) linkBlank.value = null
+    const linkType = linkTypes.find(({ value }) => value === link.value.type)
+    if (linkType?.noTarget) link.value.blank = null
   })
 
-  const getSaveableValues = () => {
-    const type = linkType.value
-    let href = linkHref.value
-    const newTab = linkBlank.value
-    let target = newTab ? '_blank' : null
+  const getDisplayValues = (old: Record<string, any>) => {
+    let type: LinkTypeValue | undefined = old.href ? undefined : 'external_link'
+    let href = old.href ? old.href : ''
+    let blank: boolean | null = null
 
-    if (newTab) target = '_blank'
+    if (old.hasOwnProperty('target')) blank = old.target === null ? false : true
+
+    linkTypes.forEach((linkType) => {
+      linkType.prefix.forEach((prefix) => {
+        if (href.startsWith(prefix)) {
+          type = linkType.value
+
+          if (linkType.noTarget) blank = null
+          if (linkType.hidePrefix) href = href.replace(new RegExp(`^${prefix}`, "g"), '')
+          return
+        }
+      })
+    })
+
+    return { type, href, blank }
+  }
+  const getSaveableValues = () => {
+    let { type, href, blank } = link.value
+    let target = blank ? '_blank' : null
+
+    if (blank) target = '_blank'
 
     linkTypes.forEach((linkType) => {
       if (linkType.value !== type) return
-      if (newTab === null && linkType.newTabDefault) target = '_blank'
+      if (blank === null && linkType.newTabDefault) target = '_blank'
 
       linkType.prefix.forEach((prefix) => {
         if (linkType.hidePrefix) {
@@ -78,8 +103,7 @@ export function useLink(editor: Editor) {
 
   const validationErrors = ref<string[]>([])
   const validateInput = () => {
-    const type = linkType.value
-    const href = linkHref.value
+    const { type, href } = link.value
 
     validationErrors.value = []
 
@@ -105,15 +129,19 @@ export function useLink(editor: Editor) {
 
   function linkOpen() {
     const attrs = editor.getAttributes('link')
-    linkHref.value = attrs.href
-    linkBlank.value = attrs.target === null ? false : true
+    const { type, href, blank } = getDisplayValues(attrs)
+
+    link.value.type = type
+    link.value.href = href
+    link.value.blank = blank
     linkDrawerOpen.value = true
   }
 
   function linkClose() {
     linkDrawerOpen.value = false
-    linkHref.value = ''
-    linkBlank.value = null
+    link.value.type = undefined
+    link.value.href = ''
+    link.value.blank = null
   }
 
   function linkSave() {
@@ -133,9 +161,7 @@ export function useLink(editor: Editor) {
   return {
     disableTarget,
     linkDrawerOpen,
-    linkHref,
-    linkBlank,
-    linkType,
+    link,
     linkTypes,
     linkPlaceholder,
     linkOpen,

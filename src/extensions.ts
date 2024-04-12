@@ -94,7 +94,7 @@ export const extensionsMeta: ExtensionMeta[] = [
     load: () => Link
       .extend({ inclusive: false })
       .configure({
-        HTMLAttributes: { rel: null, target: null },
+        HTMLAttributes: { rel: null, style: null, target: null },
         openOnClick: 'whenNotEditable',
         protocols: [
           'ftp',
