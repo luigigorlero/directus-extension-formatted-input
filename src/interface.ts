@@ -56,6 +56,10 @@ export default defineInterface({
               text: 'Highlight',
             },
             {
+              value: 'code',
+              text: 'Code',
+            },
+            {
               value: 'link',
               text: '$t:wysiwyg_options.link',
             },

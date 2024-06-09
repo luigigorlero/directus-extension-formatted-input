@@ -33,6 +33,10 @@
         @click="editor.chain().focus().toggleHighlight().run()">
         <VIcon name="format_ink_highlighter" />
       </VButton>
+      <VButton v-if="editorExtensions.includes('code')" :disabled="disabled || !editor.can().toggleCode()" secondary
+        icon small :active="editor.isActive('code')" @click="editor.chain().focus().toggleCode().run()">
+        <VIcon name="code" />
+      </VButton>
       <template v-if="editorExtensions.includes('link')">
         <span style="width: 12px;" />
         <div>
@@ -101,7 +105,7 @@ import { loadExtensions } from './extensions'
 import { useLink } from './composables/link'
 import { useI18n } from 'vue-i18n'
 
-type Formats = 'bold' | 'highlight' | 'italic' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'link'
+type Formats = 'bold' | 'highlight' | 'italic' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'code' | 'link'
 
 const { t } = useI18n()
 const props = withDefaults(defineProps<{
@@ -211,6 +215,12 @@ onBeforeUnmount(() => editor.destroy())
   text-underline-offset: 4px;
 }
 
+.fi-editor__content:deep(code) {
+  background-color: var(--background-normal-alt);
+  border-radius: 2px;
+  padding: 1px 2px;
+}
+
 .fi-editor__content:focus,
 .fi-editor__content:focus-within {
   border-color: var(--theme--form--field--input--border-color-focus) !important;
@@ -232,26 +242,4 @@ onBeforeUnmount(() => editor.destroy())
     padding-right: 32px;
   }
 }
-
-/*
-.v-drawer {
-  .grid {
-    @include form-grid;
-  }
-
-  .content {
-    padding: var(--content-padding);
-    padding-top: 0;
-  }
-
-  .image-preview,
-  .media-preview {
-    width: 100%;
-    height: var(--input-height-tall);
-    margin-bottom: 24px;
-    object-fit: cover;
-    border-radius: var(--border-radius);
-  }
-}
-*/
 </style>

@@ -1,5 +1,4 @@
 import { Node } from '@tiptap/core'
-import type { AnyExtension, Extensions } from '@tiptap/core'
 import Text from '@tiptap/extension-text'
 import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
@@ -8,7 +7,9 @@ import Strike from '@tiptap/extension-strike'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import Highlight from '@tiptap/extension-highlight'
+import Code from '@tiptap/extension-code'
 import Link from '@tiptap/extension-link'
+import type { AnyExtension, Extensions } from '@tiptap/core'
 
 export interface ExtensionMeta {
   name: string
@@ -83,6 +84,15 @@ export const extensionsMeta: ExtensionMeta[] = [
     defaults: {},
     options: [],
     load: () => Highlight,
+  },
+  {
+    name: 'code',
+    title: 'Code',
+    package: '@tiptap/extension-code',
+    group: 'mark',
+    defaults: {},
+    options: [],
+    load: () => Code,
   },
   {
     name: 'link',
