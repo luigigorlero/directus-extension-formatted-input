@@ -9,13 +9,14 @@ import Superscript from '@tiptap/extension-superscript'
 import Highlight from '@tiptap/extension-highlight'
 import Code from '@tiptap/extension-code'
 import Link from '@tiptap/extension-link'
+import HardBreak from '@tiptap/extension-hard-break'
 import type { AnyExtension, Extensions } from '@tiptap/core'
 
 export interface ExtensionMeta {
   name: string
   title: string
   package: string
-  group: 'mark'
+  group: 'mark' | 'inline'
   options: any[]
   defaults: object
   load(props: object): PromiseLike<AnyExtension> | AnyExtension
@@ -114,6 +115,15 @@ export const extensionsMeta: ExtensionMeta[] = [
           { scheme: 'tel', optionalSlashes: false },
         ],
       }),
+  },
+  {
+    name: 'hardBreak',
+    title: 'Hard Break',
+    package: '@tiptap/extension-hard-break',
+    group: 'inline',
+    defaults: {},
+    options: [],
+    load: () => HardBreak,
   },
 ]
 

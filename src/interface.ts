@@ -63,6 +63,10 @@ export default defineInterface({
               value: 'link',
               text: '$t:wysiwyg_options.link',
             },
+            {
+              value: 'hardBreak',
+              text: 'Hard Break',
+            },
           ],
         },
       },
