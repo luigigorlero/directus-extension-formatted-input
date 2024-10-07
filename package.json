@@ -2,7 +2,7 @@
 	"name": "directus-extension-formatted-input",
 	"description": "A simple Rich Inline Editor to format short texts",
 	"icon": "extension",
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"license": "MIT",
 	"author": {
 		"email": "gorliluigi@gmail.com",
