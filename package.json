@@ -2,7 +2,7 @@
 	"name": "directus-extension-formatted-input",
 	"description": "A simple Rich Inline Editor to format short texts",
 	"icon": "extension",
-	"version": "2.3.1",
+	"version": "2.3.2",
 	"license": "MIT",
 	"author": {
 		"email": "gorliluigi@gmail.com",
@@ -52,31 +52,31 @@
 		"add": "directus-extension add"
 	},
 	"dependencies": {
-		"@tiptap/core": "^2.8.0",
-		"@tiptap/extension-bold": "^2.8.0",
-		"@tiptap/extension-code": "^2.8.0",
-		"@tiptap/extension-document": "^2.8.0",
-		"@tiptap/extension-hard-break": "^2.8.0",
-		"@tiptap/extension-highlight": "^2.8.0",
-		"@tiptap/extension-italic": "^2.8.0",
-		"@tiptap/extension-link": "^2.8.0",
-		"@tiptap/extension-paragraph": "^2.8.0",
-		"@tiptap/extension-strike": "^2.8.0",
-		"@tiptap/extension-subscript": "^2.8.0",
-		"@tiptap/extension-superscript": "^2.8.0",
-		"@tiptap/extension-text": "^2.8.0",
-		"@tiptap/extension-underline": "^2.8.0",
-		"@tiptap/pm": "^2.8.0"
+		"@tiptap/core": "^2.11.2",
+		"@tiptap/extension-bold": "^2.11.2",
+		"@tiptap/extension-code": "^2.11.2",
+		"@tiptap/extension-document": "^2.11.2",
+		"@tiptap/extension-hard-break": "^2.11.2",
+		"@tiptap/extension-highlight": "^2.11.2",
+		"@tiptap/extension-italic": "^2.11.2",
+		"@tiptap/extension-link": "^2.11.2",
+		"@tiptap/extension-paragraph": "^2.11.2",
+		"@tiptap/extension-strike": "^2.11.2",
+		"@tiptap/extension-subscript": "^2.11.2",
+		"@tiptap/extension-superscript": "^2.11.2",
+		"@tiptap/extension-text": "^2.11.2",
+		"@tiptap/extension-underline": "^2.11.2",
+		"@tiptap/pm": "^2.11.2"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "12.0.2",
-		"@directus/schema": "^12.1.0",
-		"@directus/types": "^12.0.1",
-		"@tiptap/vue-3": "^2.8.0",
+		"@directus/extensions-sdk": "13.0.0",
+		"@directus/schema": "^13.0.0",
+		"@directus/types": "^13.0.0",
+		"@tiptap/vue-3": "^2.11.2",
 		"@types/validator": "^13.12.2",
-		"typescript": "^5.6.2",
+		"typescript": "^5.7.3",
 		"validator": "^13.12.0",
-		"vue": "^3.5.11",
-		"vue-i18n": "^10.0.4"
+		"vue": "^3.5.13",
+		"vue-i18n": "^11.0.1"
 	}
 }
